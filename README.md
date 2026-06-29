@@ -3,10 +3,16 @@
 Make the ASE GUI (`ase gui`, **Ctrl+B**) draw bonds the way Jmol does:
 half-colored sticks with a Jmol-style bond rule, instead of plain black lines.
 
-`patch_ase_bond_colors.py` edits the installed `ase/gui/view.py` and
-`ase/gui/ui.py` in place. It is **idempotent**, makes a one-time `.orig`
-backup of each file, and matches code by content (not line numbers), so it
-works across ASE **3.21–3.26** and can be re-run after an ASE upgrade.
+Two ways to apply it, same result:
+
+- **`patch_ase_bond_colors.py`** — edits the installed `ase/gui/view.py` and
+  `ase/gui/ui.py` **in place** (persistent; a `conda`/`pip` reinstall reverts it).
+- **`ase_gui_jmol_launcher.py`** — applies the same edits **in memory** and opens
+  the GUI; writes **nothing** to disk, re-patches every run (survives upgrades).
+
+Both are **idempotent**, match code by content (not line numbers) so they work
+across ASE **3.21–3.26**, and encode the same set of edits. The file patcher
+makes a one-time `.orig` backup of each file.
 
 ## What it changes
 
@@ -42,13 +48,13 @@ over-bonds large/metal atoms. Examples: Ru–Ru if `d < 3.37 Å`, Ru–O if
 
 ## Usage
 
-Run it with the **same Python that runs `ase gui`**. To find it:
+Run either script with the **same Python that runs `ase gui`**. To find it:
 
 ```sh
 head -1 "$(which ase)"
 ```
 
-Then:
+### Persistent (edit installed files)
 
 ```sh
 # patch the ASE of THIS python
@@ -61,7 +67,17 @@ python patch_ase_bond_colors.py /path/to/site-packages/ase
 python patch_ase_bond_colors.py --revert
 ```
 
-Reopen `ase gui <file>` and press **Ctrl+B**.
+Then reopen `ase gui <file>` and press **Ctrl+B**.
+
+### In memory (no disk changes)
+
+```sh
+# opens the real ASE GUI with bonds shown; nothing written to disk
+python ase_gui_jmol_launcher.py STRUCTURE
+
+# verify the bond rule without opening a window
+python ase_gui_jmol_launcher.py --check
+```
 
 ## Tuning
 
