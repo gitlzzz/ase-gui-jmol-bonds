@@ -14,6 +14,13 @@ Both are **idempotent**, match code by content (not line numbers) so they work
 across ASE **3.21–3.26**, and encode the same set of edits. The file patcher
 makes a one-time `.orig` backup of each file.
 
+![Original ASE vs. this patch](comparison.png)
+
+*Left: stock ASE (black lines, larger balls, `d < 1.5·(Rᵢ+Rⱼ)`). Right: this
+patch (half-colored sticks, smaller balls, `d < Rᵢ+Rⱼ+0.45 Å`). Regenerate with
+`python compare_views.py [structure]` — defaults to a self-contained rutile RuO₂
+demo cell.*
+
 ## What it changes
 
 1. **Half-colored bonds** — each half of a bond takes the color of the atom on
