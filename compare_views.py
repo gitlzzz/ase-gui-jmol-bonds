@@ -89,7 +89,7 @@ def draw_panel(ax, atoms, P, depth, title, sub, *, half_color, cutoffs, ball):
             fontsize=7.5)
 
 
-R = rot(-72, 18)
+R = rot(-90, 0)        # side view: x horizontal, z vertical, looking along y
 
 
 def main():
